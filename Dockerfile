@@ -10,11 +10,10 @@ RUN mvn clean package
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
-# Copy the JAR file built by Maven
-COPY --from=build /app/target/your-app.jar /app/your-app.jar
+COPY --from=build /app/target/firstproject-0.0.1-SNAPSHOT.jar /app/firstproject-0.0.1-SNAPSHOT.jar
 
 # Expose the application on port 8080
 EXPOSE 8080
 
 # Run the application
-ENTRYPOINT ["java", "-jar", "/app/your-app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/firstproject-0.0.1-SNAPSHOT.jar"]
