@@ -21,6 +21,9 @@ jobs:
         with:
           driver: container
 
+      - name: Create a new builder
+        run: docker buildx create --use
+
       - name: Log in to Docker Hub
         uses: azure/docker-login@v1
         with:
@@ -33,7 +36,7 @@ jobs:
         with:
           timezoneLinux: Asia/Seoul
         
-      - name: set env  # TAG를 현재 시간으로 설정
+      - name: set env  # TAG 를 현재 시간으로 설정
         run: echo "NOW=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
       
       - name: Extract metadata (tags, labels) for Docker
