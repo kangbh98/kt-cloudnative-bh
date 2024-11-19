@@ -23,12 +23,6 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
-      # 추가: 자체 서명된 인증서를 신뢰하도록 설정
-      - name: Trust self-signed certificate
-        run: |
-          echo "NODE_EXTRA_CA_CERTS=/path/to/your/certificate.crt" >> $GITHUB_ENV
-        # 위에서 /path/to/your/certificate.crt를 실제 인증서 경로로 바꿔주세요
-
       - name: Build and Push to ACR
         uses: docker/build-push-action@v2
         with:
