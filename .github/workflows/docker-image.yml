@@ -24,9 +24,8 @@ jobs:
           password: ${{ secrets.ACR_PASSWORD }}
 
       - name: Setup timezone
-        uses: zcong1993/setup-timezone@master
-        with:
-          timezone: Asia/Seoul
+        run: sudo systemsetup -settimezone "Asia/Seoul"
+
           
       - name: set env  # TAG 를 현재 시간으로 설정
         run: echo "NOW=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
