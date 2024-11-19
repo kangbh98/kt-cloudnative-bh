@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Image to ACR
 
 on:
   push:
@@ -7,44 +7,42 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Log in to Azure Container Registry (ACR)
-        uses: docker/login-action@v2
+      - name: Log in to ACR
+        uses: azure/docker-login@v1
         with:
-          registry: ${{ secrets.AZURE_URL }}  # ACR URL (예: myregistry.azurecr.io)
+          login-server: ${{ secrets.AZURE_URL }}
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
-      - name: Set Timezone
+      - name: Setup timezone
         uses: zcong1993/setup-timezone@master
         with:
-          timezoneLinux: Asia/Seoul
-
-      - name: Set environment variable for TAG
+          timezone: Asia/Seoul
+          
+      - name: set env  # TAG 를 현재 시간으로 설정
         run: echo "NOW=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
-
+        
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v2
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          images: ${{ secrets.AZURE_URL }}/${{ github.repository }}
-          tags: ${{ env.NOW }}
-
-      - name: Build and Push Docker Image
+          images: ${{ github.repository }}
+          tags: ${{ env.NOW }} # ${{ github.event.inputs.name }}
+    
+      - name: Build and Push to ACR
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile
           push: true
-          tags: ${{ secrets.AZURE_URL }}/${{ github.repository }}:${{ env.NOW }}
+          file: ./Dockerfile
+          platforms: linux/amd64
+          tags: ${{ secrets.AZURE_URL }}/${{ steps.meta.outputs.tags }}
