@@ -3,6 +3,7 @@ package com.kt.edu.firstproject.controller;
 import com.kt.edu.firstproject.dto.ArticleForm;
 import com.kt.edu.firstproject.entity.Article;
 import com.kt.edu.firstproject.repository.ArticleRepository;
+import io.micrometer.core.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,21 +24,27 @@ public class ArticleController {
     public String newArticleForm() {
         return "articles/new";
     }
+
     @PostMapping("/articles/create")
-    public String createArticle(ArticleForm form) {
+    public String createArticle(ArticleForm form , RedirectAttributes redirectAttributes) {
         log.info(form.toString());    // println() 을 로깅으로 대체!
+
 
         //1. DTO를 를 변환 , entity
         Article article = form.toEntity();
         log.info(article.toString());    // println() 을 로깅으로 대체!
 
         // 2. Repository에게 Entity를 DB로 저장하게 함
+        long start = System.currentTimeMillis();
         Article saved = articleRepository.save(article);
+        long duration = System.currentTimeMillis() - start;
+
+        // flash attribute로 처리 시간을 전달
+        redirectAttributes.addFlashAttribute("dbProcessingTime", duration);
         log.info(saved.toString());   // println() 을 로깅으로 대체!
 
         // 리다이렉트 적용: 생성 후, 브라우저가 해당 URL로 재요청
         return "redirect:/articles/" + saved.getId();
-
     }
 
     @GetMapping("/articles/{id}") // 해당 URL요청을 처리 선언

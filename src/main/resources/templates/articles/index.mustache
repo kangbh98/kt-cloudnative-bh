@@ -6,8 +6,87 @@
 {{/msg}}
 
 <style>
-    table, th, td {
-        border: 1px solid black;
+    /* 기본 바디 스타일 */
+    body {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 20px;
+        color: #333;
+    }
+
+    /* 부트스트랩 알림을 커스터마이징 */
+    .alert {
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+    }
+    .alert-primary {
+        background-color: #e7f1ff;
+        border: 1px solid #b8daff;
+        color: #084298;
+    }
+    .btn-close {
+        filter: brightness(0.8);
+    }
+    .btn-close:hover {
+        filter: brightness(1);
+    }
+
+    /* 테이블 스타일 개선 */
+    table {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto 1.5rem;
+        border-collapse: collapse;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        background-color: #fff;
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+    thead {
+        background-color: #007acc;
+        color: #fff;
+    }
+    th, td {
+        padding: 0.75rem 1rem;
+        text-align: left;
+        border-bottom: 1px solid #dee2e6;
+    }
+    th {
+        font-weight: bold;
+    }
+    tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+    tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* 링크 스타일 */
+    a {
+        color: #007acc;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    a:hover {
+        color: #005fa3;
+        text-decoration: underline;
+    }
+
+    /* "New Article" 버튼 스타일 */
+    a[href="/articles/new"] {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+        background-color: #28a745;
+        color: #fff;
+        border-radius: 0.3rem;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+    a[href="/articles/new"]:hover {
+        background-color: #218838;
     }
 </style>
 
@@ -30,6 +109,6 @@
     {{/articleList}}
     </tbody>
 </table>
-
-<a href="/articles/new">New Article</a>
-
+<div style="text-align: center;">
+    <a href="/articles/new">New Article</a>
+</div>
